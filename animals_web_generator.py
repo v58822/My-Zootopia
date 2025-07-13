@@ -7,24 +7,37 @@ def load_data(file_path):
 
 animals_data = load_data("animals_data.json")
 
+
 def print_animals_overview(animals_data):
-    """Prints name, diet, first location, and type for each animal (if available)."""
-    for animal in animals_data:
-        name = animal.get("name")
-        characteristics = animal.get("characteristics", {})
-        diet = characteristics.get("diet")
-        type_ = characteristics.get("type")
-        location = animal.get("locations", [None])[0]
+  """Generates a text block with name, diet, location, and type for each animal."""
+  output = ""
+  for animal in animals_data:
+    name = animal.get("name")
+    characteristics = animal.get("characteristics", {})
+    diet = characteristics.get("diet")
+    type_ = characteristics.get("type")
+    location = animal.get("locations", [None])[0]
 
-        if name:
-            print(f"Name: {name}")
-        if diet:
-            print(f"Diet: {diet}")
-        if location:
-            print(f"Location: {location}")
-        if type_:
-            print(f"Type: {type_}")
-        print()
+    if name:
+      output += f"Name: {name}\n"
+    if diet:
+      output += f"Diet: {diet}\n"
+    if location:
+      output += f"Location: {location}\n"
+    if type_:
+      output += f"Type: {type_}\n"
+    output += "\n"
+  return output
 
 
-print_animals_overview(animals_data)
+if __name__ == "__main__":
+  animals_data = load_data("animals_data.json")
+  animals_text = print_animals_overview(animals_data)
+
+  with open("animals_template.html", "r") as f:
+    template_html = f.read()
+
+  final_html = template_html.replace("__REPLACE_ANIMALS_INFO__", animals_text)
+
+  with open("animals.html", "w") as f:
+    f.write(final_html)
