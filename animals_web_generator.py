@@ -8,28 +8,33 @@ def load_data(file_path):
 animals_data = load_data("animals_data.json")
 
 
-def print_animals_overview(animals_data):
-    """Generates an HTML block for each animal as <li> with styled title and text."""
-    output = ""
-    for animal in animals_data:
-        name = animal.get("name")
-        characteristics = animal.get("characteristics", {})
-        diet = characteristics.get("diet")
-        type_ = characteristics.get("type")
-        location = animal.get("locations", [None])[0]
+def serialize_animal(animal):
+    """Returns the HTML string for a single animal entry."""
+    name = animal.get("name")
+    characteristics = animal.get("characteristics", {})
+    diet = characteristics.get("diet")
+    type_ = characteristics.get("type")
+    location = animal.get("locations", [None])[0]
 
-        output += '<li class="cards__item">\n'
-        if name:
-            output += f'  <div class="card__title">{name}</div>\n'
-        output += '  <p class="card__text">\n'
-        if diet:
-            output += f'    <strong>Diet:</strong> {diet}<br/>\n'
-        if location:
-            output += f'    <strong>Location:</strong> {location}<br/>\n'
-        if type_:
-            output += f'    <strong>Type:</strong> {type_}<br/>\n'
-        output += '  </p>\n'
-        output += '</li>\n'
+    output = '<li class="cards__item">\n'
+    if name:
+        output += f'  <div class="card__title">{name}</div>\n'
+    output += '  <p class="card__text">\n'
+    if diet:
+        output += f'    <strong>Diet:</strong> {diet}<br/>\n'
+    if location:
+        output += f'    <strong>Location:</strong> {location}<br/>\n'
+    if type_:
+        output += f'    <strong>Type:</strong> {type_}<br/>\n'
+    output += '  </p>\n'
+    output += '</li>\n'
+    return output
+
+def print_animals_overview(animals_data):
+    """Generates HTML list items for all animals using serialize_animal()."""
+    output = ''
+    for animal_obj in animals_data:
+        output += serialize_animal(animal_obj)
     return output
 
 
