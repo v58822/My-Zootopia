@@ -9,25 +9,26 @@ animals_data = load_data("animals_data.json")
 
 
 def print_animals_overview(animals_data):
-  """Generates a text block with name, diet, location, and type for each animal."""
-  output = ""
-  for animal in animals_data:
-    name = animal.get("name")
-    characteristics = animal.get("characteristics", {})
-    diet = characteristics.get("diet")
-    type_ = characteristics.get("type")
-    location = animal.get("locations", [None])[0]
+    """Generates an HTML block for each animal as <li> elements with class."""
+    output = ""
+    for animal in animals_data:
+        name = animal.get("name")
+        characteristics = animal.get("characteristics", {})
+        diet = characteristics.get("diet")
+        type_ = characteristics.get("type")
+        location = animal.get("locations", [None])[0]
 
-    if name:
-      output += f"Name: {name}\n"
-    if diet:
-      output += f"Diet: {diet}\n"
-    if location:
-      output += f"Location: {location}\n"
-    if type_:
-      output += f"Type: {type_}\n"
-    output += "\n"
-  return output
+        output += '<li class="cards__item">\n'
+        if name:
+            output += f"Name: {name}<br/>\n"
+        if diet:
+            output += f"Diet: {diet}<br/>\n"
+        if location:
+            output += f"Location: {location}<br/>\n"
+        if type_:
+            output += f"Type: {type_}<br/>\n"
+        output += "</li>\n"
+    return output
 
 
 if __name__ == "__main__":
