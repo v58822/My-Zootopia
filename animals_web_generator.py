@@ -1,11 +1,4 @@
-import json
-
-def load_data(file_path):
-  """ Loads a JSON file """
-  with open(file_path, "r") as handle:
-    return json.load(handle)
-
-animals_data = load_data("animals_data.json")
+import data_fetcher
 
 
 def serialize_animal(animal):
@@ -21,31 +14,37 @@ def serialize_animal(animal):
         output += f'  <div class="card__title">{name}</div>\n'
     output += '  <p class="card__text">\n'
     if diet:
-        output += f'    <strong>Diet:</strong> {diet}<br/>\n'
+        output += f"    <strong>Diet:</strong> {diet}<br/>\n"
     if location:
-        output += f'    <strong>Location:</strong> {location}<br/>\n'
+        output += f"    <strong>Location:</strong> {location}<br/>\n"
     if type_:
-        output += f'    <strong>Type:</strong> {type_}<br/>\n'
-    output += '  </p>\n'
-    output += '</li>\n'
+        output += f"    <strong>Type:</strong> {type_}<br/>\n"
+    output += "  </p>\n"
+    output += "</li>\n"
     return output
+
 
 def print_animals_overview(animals_data):
     """Generates HTML list items for all animals using serialize_animal()."""
-    output = ''
+    output = ""
     for animal_obj in animals_data:
         output += serialize_animal(animal_obj)
     return output
 
 
 if __name__ == "__main__":
-  animals_data = load_data("animals_data.json")
-  animals_text = print_animals_overview(animals_data)
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = data_fetcher.fetch_data(animal_name)
 
-  with open("animals_template.html", "r") as f:
-    template_html = f.read()
+    if animals_data != []:
+        animals_text = print_animals_overview(animals_data)
+    else:
+        animals_text = f'<h2>The animal "{animal_name}" doesn\'t exist.</h2>'
 
-  final_html = template_html.replace("__REPLACE_ANIMALS_INFO__", animals_text)
+    with open("animals_template.html", "r") as f:
+        template_html = f.read()
 
-  with open("animals.html", "w") as f:
-    f.write(final_html)
+    final_html = template_html.replace("__REPLACE_ANIMALS_INFO__", animals_text)
+
+    with open("animals.html", "w") as f:
+        f.write(final_html)
